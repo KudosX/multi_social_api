@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => { :omniauth_callbacks => "callbacks"}
+
   root 'static_pages#index'
 
   get 'static_pages/about'
@@ -8,6 +8,10 @@ Rails.application.routes.draw do
 
   get 'static_pages/contact'
 
-  get '/users/auth/twitter/callback', to: 'sessions#create'
+  devise_for :users, :controllers => { :registrations => 'registrations', :omniauth_callbacks => "callbacks"}
+
+  get '/users/auth/:provider/callback', to: 'sessions#create'
+  post '/auth/:provider/callback' => 'authentications#create'
+
 
 end

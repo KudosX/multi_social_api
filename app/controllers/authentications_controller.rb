@@ -1,9 +1,9 @@
-class CallbacksController < Devise::OmniauthCallbacksController
-  #def twitter
-  #  @user = User.from_omniauth(request.env["omniauth.auth"])
-  #  sign_in_and_redirect @user
-  #end
-  def all
+class AuthenticationsController < ApplicationController
+  def index
+    @authentications = current_user.authentications if current_user
+  end
+
+  def create
     omniauth = request.env["omniauth.auth"]
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
     if authentication
@@ -25,6 +25,12 @@ class CallbacksController < Devise::OmniauthCallbacksController
       end
     end
   end
-  alias_method :facebook, :all
-  alias_method :twitter, :all
+
+  def destroy
+    @authentication = current_user.authentications.find(params[:id])
+    @authentication.destroy
+    flash[:notice] = "Successfully destroyed authentication."
+    redirect_to authentications_url
+  end
+
 end
