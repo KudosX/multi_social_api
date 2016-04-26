@@ -28,6 +28,10 @@ class User < ApplicationRecord
     end
   end
 
+  def provider
+
+  end
+
   def twitter?
     self.provider == 'twitter'
   end
@@ -40,10 +44,8 @@ class User < ApplicationRecord
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
       user.save
-      user
     end
   end
-
 end
 
 # validates :email, presence: false

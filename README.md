@@ -46,7 +46,7 @@ bundle config --local build.therubyracer --with-v8-dir=/usr/local/opt/v8-315
 bundle 
 ```
 
-#### Step 1 - setup devise: 
+#### Step 1 - setup devise and create 
 ```
 rails g devise:install
 rails g devise User
@@ -54,7 +54,8 @@ rake db:create
 rake db:migrate
 ```
 #### Step 2 - add action to not serve up pages until user authenticated:
-add `before_action :authenticate_user!` to application_controller just before `end`
+- add to application_controller just before `end`
+- `before_action :authenticate_user!, :except => [:index, :about, :contact, :faq]` 
 
 #### Step 3: to view routes
 `rake routes` existing routes
@@ -88,7 +89,7 @@ add `before_action :authenticate_user!` to application_controller just before `e
 before_action :configure_permitted_parameters, if: :devise_controller?
 protected 
 def configure_permitted_parameters
-  devise_parameter_sanitizer.for(:sign_up) << [:first_name, :last_name]
+  devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name])
 end
 ```
 #### Step 8 - get client ID(KEY) and SECRET from OAuth Service Providers
@@ -127,6 +128,7 @@ config.omniauth :twitter, ENV["TWITTER_KEY"], ENV["TWITTER_SECRET"],
        user.uid = auth.uid
        user.email = auth.info.email
        user.password = Devise.friendly_token[0,20]
+       user.save
      end
   end
 ```
@@ -301,6 +303,10 @@ end
 <h2>Sign up</h2>
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
+  <p><%= f.label :first_name %><br />
+  <%= f.text_field :first_name%></p>
+  <p><%= f.label :last_name %><br />
+  <%= f.text_field :last_name %></p>
   <p><%= f.label :email %><br />
   <%= f.text_field :email %></p>
 <% if @user.password_required? %>
@@ -320,6 +326,10 @@ end
 <div class="border-form-div">
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :class => "edit_user_form"}) do |f| %>
   <%= devise_error_messages! %>
+  <p><%= f.label :first_name %><br />
+  <%= f.text_field :first_name%></p>
+  <p><%= f.label :last_name %><br />
+  <%= f.text_field :last_name %></p>
   <p><%= f.label :email %><br />
   <%= f.text_field :email %></p>
   <p><%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
@@ -375,6 +385,8 @@ end
 - add to class: `validates :email, presence: true, unless: :twitter?`
 - add method to user.rb: 
 ```
+def provider
+end
 def twitter?
 self.provider == 'twitter'
 end
