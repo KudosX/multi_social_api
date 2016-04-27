@@ -1,8 +1,5 @@
 class CallbacksController < Devise::OmniauthCallbacksController
-  #def twitter
-  #  @user = User.from_omniauth(request.env["omniauth.auth"])
-  #  sign_in_and_redirect @user
-  #end
+
   def all
     omniauth = request.env["omniauth.auth"]
     authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
@@ -25,6 +22,7 @@ class CallbacksController < Devise::OmniauthCallbacksController
       end
     end
   end
-  alias_method :facebook, :all
+
   alias_method :twitter, :all
 end
+

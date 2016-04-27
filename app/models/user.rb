@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :authentications
 
   validates :email, presence: true, unless: :twitter?
 
@@ -8,7 +9,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, :omniauth_providers => [:twitter]
 
-  has_many :authentications
 
   def apply_omniauth(omniauth)
     authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
@@ -43,7 +43,6 @@ class User < ApplicationRecord
       user.uid = auth.uid
       user.email = auth.info.email
       user.password = Devise.friendly_token[0,20]
-      user.save
     end
   end
 end

@@ -114,7 +114,7 @@ export TWITTER_SECRET="xxxxxxsecret_from_twitter_apixxxxxx"
 #### Step 10 - add ENVIRONMENT VARIABLES to devise.rb, just before end
 ```
 config.omniauth :twitter, ENV["TWITTER_KEY"], ENV["TWITTER_SECRET"],
-                 scope: 'public_profile,email', info_fields: 'id,email,name,link'
+                 scope: 'public_profile', info_fields: 'id,name,link'
 ```
 
 #### Step 11 - specify service provider in user.rb model and create new class
@@ -128,7 +128,6 @@ config.omniauth :twitter, ENV["TWITTER_KEY"], ENV["TWITTER_SECRET"],
        user.uid = auth.uid
        user.email = auth.info.email
        user.password = Devise.friendly_token[0,20]
-       user.save
      end
   end
 ```
@@ -215,7 +214,7 @@ class AuthenticationsController < ApplicationController
  end
 end
 ```
-- add methods to the user.rb model just below has_many
+- add methods to the user.rb model
 ```
  has_many :authentications
     def apply_omniauth(omniauth)
@@ -398,4 +397,5 @@ user.password = Devise.friendly_token[0,20]
       user
     end
 ```
+  
     

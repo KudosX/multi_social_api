@@ -269,7 +269,8 @@ Devise.setup do |config|
   #scope: 'public_profile', info_fields: 'name'
 
   # Add your ID and secret here #ID first, secret second
-  config.omniauth :twitter, ENV["TWITTER_KEY"], ENV["TWITTER_SECRET"]
-
+  config.omniauth :twitter, ENV["TWITTER_KEY"], ENV["TWITTER_SECRET"],
+  scope: 'public_profile', info_fields: 'id,name,link'
 
 end
+
