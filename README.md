@@ -1,4 +1,4 @@
-## Social API to Twitter, Facebook, Linkedin, Instagram and Pinterest using Devise, OmniAuth:
+## Social API to Twitter, Facebook, Linkedin and Instagram using Devise, OmniAuth:
 * Login while maintaining single User even if multiple emails associated with different social logins
 * Gemset ruby-2.3.0@rails5.0.0.beta3 
 * Ruby 2.3.0
@@ -13,7 +13,6 @@ gem 'therubyracer'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 gem 'omniauth-linkedin'
-gem 'omniauth-pinterest'
 gem 'omniauth-instagram'
 ```
 #### Followed the two below blog posts to complete project:
@@ -101,7 +100,6 @@ end
 - Twitter: http://127.0.0.1:3000/users/auth/twitter/callback
 - Linkedin: http://localhost:3000/users/auth/linkedin/callback
 - Instagram: http://localhost:3000/users/auth/instagram/callback
-- Pinterest: http://localhost:3000/users/auth/pinterest/callback
 
 #### Step 9 - add ENVIRONMENT VARIABLES to .bash_profile on mac 
 - for development mode only
@@ -443,4 +441,26 @@ def linkedin?
     self.provider == 'linkedin'
   end
 ```
-- make sure `alias_method :facebook, :all` is added in callbacks_controller
+- make sure `alias_method :linkedin, :all` is added in callbacks_controller
+
+#### Step 21 - adding Instagram
+- developer site: https://www.instagram.com/developer/
+- add the following to devise.rb
+```
+config.omniauth :instagram, ENV["INSTAGRAM_ID"], ENV["INSTAGRAM_SECRET"]
+```                     
+- add Instagram ID and Secret to your .bash_profile as in step 9
+- close terminal and open to reset .bash_profile
+- Documentation: https://github.com/ropiku/omniauth-instagram
+- make the model/user.rb look like this
+```
+:omniauthable, :omniauth_providers => [:twitter, :facebook, :linkedin, :instagram]
+```
+- add the following method to model/user.rb
+```
+def instagram?
+    self.provider == 'instagram'
+  end
+```
+- make sure `alias_method :instagram, :all` is added in callbacks_controller
+- instagram has a review policy for app approval and using scopes, must submit video. 

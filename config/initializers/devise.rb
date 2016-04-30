@@ -276,5 +276,6 @@ Devise.setup do |config|
   config.omniauth :linkedin, ENV["LINKEDIN_ID"], ENV["LINKEDIN_SECRET"],
                   scope: 'r_basicprofile',
                   fields: ['id', 'first-name', 'last-name', 'location', 'picture-url', 'public-profile-url']
+  config.omniauth :instagram, ENV["INSTAGRAM_ID"], ENV["INSTAGRAM_SECRET"]
 end
 

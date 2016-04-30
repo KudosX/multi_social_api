@@ -8,7 +8,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, :omniauth_providers => [:twitter, :facebook, :linkedin]
+         :omniauthable, :omniauth_providers => [:twitter, :facebook, :linkedin, :instagram]
 
 
   def apply_omniauth(omniauth)
@@ -43,6 +43,10 @@ class User < ApplicationRecord
 
   def linkedin?
     self.provider == 'linkedin'
+  end
+
+  def instagram?
+    self.provider == 'instagram'
   end
 
   def self.from_omniauth(auth)
