@@ -270,7 +270,11 @@ Devise.setup do |config|
 
   # Add your ID and secret here #ID first, secret second
   config.omniauth :twitter, ENV["TWITTER_KEY"], ENV["TWITTER_SECRET"],
-  scope: 'public_profile', info_fields: 'id,name,link'
-
+                  scope: 'public_profile', info_fields: 'id,name,link'
+  config.omniauth :facebook, ENV["FACEBOOK_ID"], ENV["FACEBOOK_SECRET"],
+                  scope: 'public_profile', info_fields: 'id,name,link'
+  config.omniauth :linkedin, ENV["LINKEDIN_ID"], ENV["LINKEDIN_SECRET"],
+                  scope: 'r_basicprofile',
+                  fields: ['id', 'first-name', 'last-name', 'location', 'picture-url', 'public-profile-url']
 end
 

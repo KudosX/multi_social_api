@@ -95,6 +95,7 @@ end
 #### Step 8 - get client ID(KEY) and SECRET from OAuth Service Providers
 - https://dev.twitter.com/oauth/overview/application-owner-access-tokens
 - https://apps.twitter.com to create your application
+- authentication options: https://github.com/arunagw/omniauth-twitter#authentication-options
 - below are the URL callbacks for the providers, can't use localhost but, IP address
 - Facebook: http://localhost:3000/users/auth/facebook/callback
 - Twitter: http://127.0.0.1:3000/users/auth/twitter/callback
@@ -398,4 +399,48 @@ user.password = Devise.friendly_token[0,20]
     end
 ```
   
-    
+#### Step 19 - adding Facebook 
+- go to https://developers.facebook.com and add new app
+- add the following to devise.rb
+```
+config.omniauth :facebook, ENV["FACEBOOK_ID"], ENV["FACEBOOK_SECRET"],
+                  scope: 'public_profile', info_fields: 'id,name,link'
+```                     
+- add Facebook ID and Secret to your .bash_profile as in step 9
+- close terminal and open to reset .bash_profile
+- scope list: https://developers.facebook.com/docs/facebook-login/permissions/v2.3#reference
+- info_fields: https://developers.facebook.com/docs/graph-api/reference/user/
+- config settings:  https://github.com/mkdynamic/omniauth-facebook#configuring
+- make the model/user.rb look like this
+```
+:omniauthable, :omniauth_providers => [:twitter, :facebook]
+```
+- add the following method to model/user.rb
+```
+def facebook?
+    self.provider == 'facebook'
+  end
+```
+- make sure `alias_method :facebook, :all` is added in callbacks_controller
+
+#### Step 20 - add Linkedin
+- go to https://www.linkedin.com/developer/apps and add new app
+- add the following to devise.rb
+```
+config.omniauth :linkedin, ENV["LINKEDIN_ID"], ENV["LINKEDIN_SECRET"],
+                  scope: 'r_basicprofile', fields: ['id', 'first-name', 'last-name', 'location', 'picture-url', 'public-profile-url']
+```                     
+- add Linkedin ID and Secret to your .bash_profile as in step 9
+- close terminal and open to reset .bash_profile
+- profile fields: https://github.com/decioferreira/omniauth-linkedin-oauth2#profile-fields
+- make the model/user.rb look like this
+```
+:omniauthable, :omniauth_providers => [:twitter, :facebook, :linkedin]
+```
+- add the following method to model/user.rb
+```
+def linkedin?
+    self.provider == 'linkedin'
+  end
+```
+- make sure `alias_method :facebook, :all` is added in callbacks_controller

@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   devise_for :users, :controllers => { :registrations => 'registrations', :omniauth_callbacks => "callbacks"}
 
- # get '/users/auth/:provider/callback', to: 'sessions#create'
+  #get '/auth/:provider/callback', to: 'authentications#create'
   post '/auth/:provider/callback' => 'authentications#create'
 
 

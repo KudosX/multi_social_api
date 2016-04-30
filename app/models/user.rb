@@ -2,12 +2,13 @@ class User < ApplicationRecord
   has_many :authentications
 
   validates :email, presence: true, unless: :twitter?
+  validates :email, presence: true, unless: :facebook?
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, :omniauth_providers => [:twitter]
+         :omniauthable, :omniauth_providers => [:twitter, :facebook, :linkedin]
 
 
   def apply_omniauth(omniauth)
@@ -36,6 +37,13 @@ class User < ApplicationRecord
     self.provider == 'twitter'
   end
 
+  def facebook?
+    self.provider == 'facebook'
+  end
+
+  def linkedin?
+    self.provider == 'linkedin'
+  end
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
